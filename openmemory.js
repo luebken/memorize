@@ -1,56 +1,3 @@
-<!DOCTYPE html>
-<head>
-  <style type="text/css">
-  
-    body {
-      -webkit-tap-highlight-color: rgba(0,0,0,0);
-    }
-    .card { 
-      top: 100px;
-      width : 50px;
-      height : 50px;
-      margin : 5px;
-      padding : 5px;
-      position: absolute;
-      -webkit-transform-style : preserve-3d;
-      -webkit-transition : 0.5s;
-      -webkit-transition-property: -webkit-transform;    	
-    }
-    .front, .back, .hit {
-      width : 100%;
-      height : 100%;
-      position: absolute;
-      left:0px;
-      top:0px;
-      -webkit-border-radius: 5px;
-    }
-    .front {
-    	-webkit-backface-visibility: hidden;
-    }
-    .back {
-      -webkit-transform: rotateY(180deg);    
-    }
-    .flip, .flip-back {
-      -webkit-transform: rotateY(180deg);;      
-    }
-    
-    img {
-      max-height: 60px;
-      max-width: 60px;
-      -webkit-border-radius: 5px;
-      -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 60px rgba(0, 0, 0, 0.1) inset;
-    }
-    span {
-      position: absolute;
-      top: 0;
-      left: 0;
-      display: none; /* turn on for debugging*/
-    }
-
-  </style>
-
-<script type="text/javascript">
-
   function createCard(i, j, cardnr, engine) {
     var card = document.createElement("div");
 
@@ -161,15 +108,4 @@
     var map = createMap();
     draw(map, engine(map));
   }
-  </script>
-  
-  <meta name="viewport" content="width=device-width" />
-  
-</head>
-<body onload="main()">
-OpenMemory  
-<div id="spielbereich"></div>
-By <a href="http://it-agile.de">it-agile</a> and <a href="http://uxebu.com">uxebu</a> 
 
-</body>
-</html>
