@@ -97,11 +97,10 @@
             div.onclick = function() {};
             this.lastclick.onclick  = function() {};
           } else {
-            var toturn1 = this.lastclick;
-            var toturn2 = div;
+            var last = this.lastclick;
             setTimeout(function() {
-              toturn1.className = "card flipback";                          
-              toturn2.className = "card flipback";                          
+              last.className = "card flipback";                          
+              div.className = "card flipback";                          
             }, 500);
           }
           this.lastclick = null; 
