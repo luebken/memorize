@@ -7,16 +7,32 @@
       margin : 5px;
       padding : 5px;
       position: absolute;
+      -webkit-transform-style : preserve-3d;
+      -webkit-transition : 0.5s;
+      
+    }
+    .front, .back, .hit {
+      width : 100%;
+      height : 100%;
+      position: absolute;
+      left:0px;
+      top:0px;
     }
     .front {
       background : red;
+    	-webkit-backface-visibility: hidden;
     }
     .back {
-      background : blue;      
+      background : blue;  
+      -webkit-transform: rotateY(180deg);    
     }
-    .hit {
-      background : green;      
+    .flip {
+      -webkit-transform: rotateY(180deg);;      
     }
+    .flip-back {
+      -webkit-transform: rotateY(180deg);;      
+    }
+    
   </style>
 
 <script type="text/javascript">
@@ -37,19 +53,27 @@
     for (var i = 0; i < map.length; i++) {
       for (var j = 0; j < map[i].length; j++) {
         var card = document.createElement("div");
-        card.className = "card front";
+        card.className = "card";
         card.style.left = (i * 70) + "px";
         card.style.top = (j * 70) + "px";
         card.onclick = function () {
-          if(this.className == "card back") {
-            this.className = "card front"; 
-          } else if(this.className == "card front") {
-            this.className = "card back"; 
-          }           
+          if(this.className == "card flip") {
+            this.className = "card flipback";
+          } else {
+            this.className = "card flip";
+          }      
           engine.click(this); 
         }
-        var myText = document.createTextNode(map[i][j]);
-        card.appendChild(myText);
+        var front = document.createElement("div");
+        front.className = "front";
+        var back = document.createElement("div");
+        back.className = "back";
+        
+        front.appendChild(document.createTextNode(map[i][j]));
+        back.appendChild(document.createTextNode('back'));
+        card.appendChild(back);
+        card.appendChild(front);
+        
         document.getElementById('spielbereich').appendChild(card);
       }
     }
@@ -60,12 +84,25 @@
       lastclick: null,
       click: function(div) {
         if(this.lastclick) {
-          if(div.innerText == this.lastclick.innerText) { //hit
-            div.className = "card hit";
-            this.lastclick.className = "card hit";
-          } else { //no hit
-            div.className = "card front";
-            this.lastclick.className = "card front";
+          var sameNodes = div.childNodes[1] === this.lastclick.childNodes[1];
+          if(sameNodes) {
+            this.lastclick = null;             
+            return;
+          }
+          var lastValue = div.childNodes[1].innerText;
+          var currentValue = this.lastclick.childNodes[1].innerText;
+          if(lastValue == currentValue) { //hit  
+            div.childNodes[0].style.background = "green";
+            this.lastclick.childNodes[0].style.background = "green";
+            div.onclick = function() {};
+            this.lastclick.onclick  = function() {};
+          } else {
+            var toturn1 = this.lastclick;
+            var toturn2 = div;
+            setTimeout(function() {
+              toturn1.className = "card flipback";                          
+              toturn2.className = "card flipback";                          
+            }, 500);
           }
           this.lastclick = null; 
         } else {          
