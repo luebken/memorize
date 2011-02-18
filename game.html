@@ -86,9 +86,10 @@
     }
   }
   
-  function engine() {
+  function engine(map) {
     var engine = {
       lastclick: null,
+      pairsleft: (map.length * map[0].length) / 2 ,
       click: function(div) {
         if(this.lastclick) {
           var sameNodes = div.childNodes[1] === this.lastclick.childNodes[1];
@@ -103,6 +104,10 @@
             this.lastclick.childNodes[0].style.background = "green";
             div.onclick = function() {};
             this.lastclick.onclick  = function() {};
+            this.pairsleft--;
+            if(this.pairsleft == 0) {
+              alert('Finished! Congrats.');
+            }
           } else {
             var last = this.lastclick;
             setTimeout(function() {
@@ -121,7 +126,7 @@
   
   function main() {
     var map = createMap();
-    draw(map, engine());
+    draw(map, engine(map));
   }
   </script>
 </head>
