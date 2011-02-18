@@ -23,7 +23,6 @@
     	-webkit-backface-visibility: hidden;
     }
     .back {
-      background : blue;  
       -webkit-transform: rotateY(180deg);    
     }
     .flip {
@@ -43,7 +42,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
+      display: none; /* turn on for debugging*/
     }
 
   </style>
@@ -66,6 +65,7 @@
     for (var i = 0; i < map.length; i++) {
       for (var j = 0; j < map[i].length; j++) {
         var card = document.createElement("div");
+        card.setAttribute("cardid", map[i][j]);
         card.className = "card";
         card.style.left = (i * 70) + "px";
         card.style.top = (j * 70) + "px";
@@ -112,8 +112,9 @@
             this.lastclick = null;             
             return;
           }
-          var lastValue = div.childNodes[1].innerText;
-          var currentValue = this.lastclick.childNodes[1].innerText;
+          var lastValue = div.getAttribute("cardid");
+          var currentValue = this.lastclick.getAttribute("cardid");
+          
           if(lastValue == currentValue) { //hit  
             div.childNodes[0].style.background = "green";
             this.lastclick.childNodes[0].style.background = "green";
