@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<head>
+  <style type="text/css">
+    .card { 
+      width : 50px;
+      height : 50px;
+      margin : 5px;
+      padding : 5px;
+      position: absolute;
+    }
+    .front {
+      background : red;
+    }
+    .back {
+      background : blue;      
+    }
+    .hit {
+      background : green;      
+    }
+  </style>
+
+<script type="text/javascript">
+  function createMap() {
+    var cards = ['1', '1', '2', '2', '3', '3', '4', '4', '5', '5', '6','6', '7', '7' , '8', '8'];
+    var map = [];
+    for (var i = 0; i < 4; i++) {
+      map[i] = [];
+      for (var j = 0; j < 4; j++) {
+        var r = Math.floor(Math.random() * cards.length);
+        map[i][j] = cards.splice(r, 1);
+      }
+    }
+    return map;    
+  }
+  
+  function draw(map, engine) {
+    for (var i = 0; i < map.length; i++) {
+      for (var j = 0; j < map[i].length; j++) {
+        var card = document.createElement("div");
+        card.className = "card front";
+        card.style.left = (i * 70) + "px";
+        card.style.top = (j * 70) + "px";
+        card.onclick = function () {
+          if(this.className == "card back") {
+            this.className = "card front"; 
+          } else if(this.className == "card front") {
+            this.className = "card back"; 
+          }           
+          engine.click(this); 
+        }
+        var myText = document.createTextNode(map[i][j]);
+        card.appendChild(myText);
+        document.getElementById('spielbereich').appendChild(card);
+      }
+    }
+  }
+  
+  function engine() {
+    var engine = {
+      lastclick: null,
+      click: function(div) {
+        if(this.lastclick) {
+          if(div.innerText == this.lastclick.innerText) { //hit
+            div.className = "card hit";
+            this.lastclick.className = "card hit";
+          } else { //no hit
+            div.className = "card front";
+            this.lastclick.className = "card front";
+          }
+          this.lastclick = null; 
+        } else {          
+          this.lastclick = div; 
+        }
+      }
+    }
+    return engine;
+  }
+  
+  function main() {
+    var map = createMap();
+    draw(map, engine());
+  }
+  </script>
+</head>
+<body onload="main()">
+  <div id="spielbereich"></div>
+
+</body>
+</html>
