@@ -53,10 +53,7 @@
 
   function createCard(i, j, cardnr, engine) {
     var card = document.createElement("div");
-    card.setAttribute("cardnr", cardnr);
-    card.className = "card";
-    card.style.left = (i * 70) + "px";
-    card.style.top = ((j * 70) + 50) + "px";
+
     card.onclick = function () {
       if(this.className == "card flip") {
         this.className = "card flipback";
@@ -65,6 +62,20 @@
       }      
       engine.click(this); 
     }
+    card.hit = function () {
+      console.log("hit")  
+      //this.childNodes[0].style.background = "green";
+      this.onclick = function() {};
+    };
+    card.flipback = function () {
+      this.className = "card flipback";                          
+    }
+    
+    card.setAttribute("cardnr", cardnr);
+    card.className = "card";
+    card.style.left = (i * 70) + "px";
+    card.style.top = ((j * 70) + 50) + "px";
+
     var front = document.createElement("div");
     front.className = "front";
     var hint = document.createElement("span");
@@ -111,7 +122,8 @@
   function engine(map) {
     var engine = {
       lastclick: null,
-      pairsleft: (map.length * map[0].length) / 2 ,
+      pairsleft: (map.length * map[0].length) / 2,
+      
       click: function(div) {
         if(this.lastclick) {
           var sameNodes = div.childNodes[1] === this.lastclick.childNodes[1];
@@ -123,10 +135,8 @@
           var currentValue = this.lastclick.getAttribute("cardnr");
           
           if(lastValue == currentValue) { //hit  
-            div.childNodes[0].style.background = "green";
-            this.lastclick.childNodes[0].style.background = "green";
-            div.onclick = function() {};
-            this.lastclick.onclick  = function() {};
+            div.hit();
+            this.lastclick.hit();
             this.pairsleft--;
             if(this.pairsleft == 0) {
               alert('Finished! Congrats.');
@@ -134,8 +144,8 @@
           } else {
             var last = this.lastclick;
             setTimeout(function() {
-              last.className = "card flipback";                          
-              div.className = "card flipback";                          
+              last.flipback();                          
+              div.flipback();                          
             }, 500);
           }
           this.lastclick = null; 
