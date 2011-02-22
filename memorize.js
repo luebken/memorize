@@ -4,49 +4,50 @@ window.addEventListener("load", function(){
     var engine = createEngine(map);
     draw(map);
     
-    function createCard(i, j, cardnr) {
-        var card = document.createElement("div");
+    function createCard(i, j, cardNo) {
+        var card = document.createElement("div"),
+            back = document.createElement("div"),
+            front = document.createElement("div"),
+            hint = document.createElement("span"),
+            backImg = document.createElement("img"),
+            frontImg = document.createElement("img");
 
-        card.onclick = function () {
+        card.onclick = function() {
             if(this.className == "card flip") {
-                this.className = "card flipback";
+                this.flipToBack();
             } else {
-                this.className = "card flip";
+                this.flipToFront();
             }            
             engine.click(this); 
         }
-        card.hit = function () {
-            console.log("hit")  
-            //this.childNodes[0].style.background = "green";
-            this.onclick = function() {};
+        card.hit = function() {
+            this.onclick = null; // removing previous connected event listener
         };
-        card.flipback = function () {
+        card.flipToFront = function() {
+            this.className = "card flip";
+        }
+        card.flipToBack = function() {
             this.className = "card flipback";
         }
         
-        card.setAttribute("cardnr", cardnr);
+        card.setAttribute("cardNo", cardNo);
         card.className = "card";
         card.style.left = (i * 70) + "px";
         card.style.top = ((j * 70) + 50) + "px";
 
-        var front = document.createElement("div");
-        front.className = "front";
-        var hint = document.createElement("span");
-        hint.appendChild(document.createTextNode(cardnr));
-                        
-        front.appendChild(hint);
-        var img = document.createElement("img");
-        img.src = "back.jpg";
-        front.appendChild(img);
-        
-        var back = document.createElement("div");
         back.className = "back";
-        var img2 = document.createElement("img");
-        img2.src = "img"+ cardnr + ".jpg";              
-        back.appendChild(img2);
+        hint.appendChild(document.createTextNode(cardNo));
+                        
+        back.appendChild(hint);
+        backImg.src = "back.jpg";
+        back.appendChild(backImg);
+        
+        front.className = "front";
+        frontImg.src = "img"+ cardNo + ".jpg";              
+        front.appendChild(frontImg);
 
-        card.appendChild(back);
         card.appendChild(front);
+        card.appendChild(back);
         
         playground.appendChild(card);
     }
@@ -74,36 +75,36 @@ window.addEventListener("load", function(){
     
     function createEngine(map) {
         var engine = {
-            lastclick: null,
-            pairsleft: (map.length * map[0].length) / 2,
+            lastClick: null,
+            pairsLeft: (map.length * map[0].length) / 2,
             
             click: function(div) {
-                if(this.lastclick) {
-                    var sameNodes = div.childNodes[1] === this.lastclick.childNodes[1];
+                if(this.lastClick) {
+                    var sameNodes = div.childNodes[1] === this.lastClick.childNodes[1];
                     if(sameNodes) {
-                        this.lastclick = null;
+                        this.lastClick = null;
                         return;
                     }
-                    var lastValue = div.getAttribute("cardnr");
-                    var currentValue = this.lastclick.getAttribute("cardnr");
+                    var lastValue = div.getAttribute("cardNo");
+                    var currentValue = this.lastClick.getAttribute("cardNo");
                     
                     if(lastValue == currentValue) { //hit    
                         div.hit();
-                        this.lastclick.hit();
-                        this.pairsleft--;
-                        if(this.pairsleft == 0) {
+                        this.lastClick.hit();
+                        this.pairsLeft--;
+                        if(this.pairsLeft == 0) {
                             alert('Finished! Congrats.');
                         }
                     } else {
-                        var last = this.lastclick;
+                        var last = this.lastClick;
                         setTimeout(function() {
-                            last.flipback();
-                            div.flipback();
+                            last.flipToBack();
+                            div.flipToBack();
                         }, 500);
                     }
-                    this.lastclick = null; 
+                    this.lastClick = null; 
                 } else {
-                    this.lastclick = div; 
+                    this.lastClick = div; 
                 }
             }
         }

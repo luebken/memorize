@@ -34,11 +34,11 @@ body {
     -webkit-border-radius: 5px;
 }
 
-.front {
+.back {
     -webkit-backface-visibility: hidden;
 }
 
-.back {
+.front {
     -webkit-transform: rotateY(180deg);    
 }
 
