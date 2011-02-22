@@ -1,0 +1,40 @@
+9:00 - 10:30 Block 1 - Matthias
+ - Einleitung
+ - HTML5 Überblick
+ - JavaScript Überblick (Objects, Prototype, Functions)
+ - CSS3 Überblick
+ - Tooling WebInspector
+ - Übung
+   - Boilerplate vorstellen. Feste Bilder. 
+   - Gelegenheit zum Kennenlernen, Ideen zum Rumspielen geben
+   
+11:00 - 12:30 Block 2 - David
+ - CSS3 
+   - MediaQueries
+   - Image Skalierung
+ - Übung
+   - Border & Shadows für Karten
+   - Transitions zum Karten umdrehen
+
+13:30 - 15:00 Block 3 - Tobias
+ - GeoLocation & Offline
+ - YQL, Flickr-API
+ - Übung
+   - Bilder von Flickr auf GeoLocation einschränken
+   - Highscore speichern
+ 
+15:30 - 16:30 Block 4 - Tobias
+ - Demo Apparat.IO => iOS, Anroid: Anwendung für zum Ausprobieren
+ - PhoneGap Basics, Weitere APIs
+ - Übung: Installation der Anwendung
+
+16:30 - 17:00 Fragen
+
+ORGA:
+ - Email an Teilnehmer:
+   - iOS Keys
+   - Editor
+   - Chrome, Safari
+ - Nachfragen: 
+   - Gutes Internet. Ethernet.
+   - Kamera zum Präsentieren
