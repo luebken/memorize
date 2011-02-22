@@ -32,8 +32,6 @@ window.addEventListener("load", function(){
         
         card.setAttribute("cardNo", cardNo);
         card.className = "card";
-        card.style.left = (i * 70) + "px";
-        card.style.top = ((j * 70) + 50) + "px";
 
         back.className = "back";
         hint.appendChild(document.createTextNode(cardNo));

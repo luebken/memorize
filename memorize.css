@@ -6,11 +6,22 @@ body {
 .title {
     font: bold 1em Helvetica, Arial, "Luxi Sans", sans-serif;
     text-shadow: #EEE 0 1px 0;
+    padding-left:5px;
+}
+
+.subtitle {
+    font-size: 0.7em;
+    margin-top: 10px;
 }
 
 .title a{
     text-decoration: none;
     color:  rgb(80,80,80);
+}
+
+#playground {
+    overflow: hidden;
+    max-width: 300px;
 }
 
 .card { 
@@ -19,10 +30,10 @@ body {
     height : 50px;
     margin : 5px;
     padding : 5px;
-    position: absolute;
     -webkit-transform-style : preserve-3d;
     -webkit-transition : 0.5s;
-    -webkit-transition-property: -webkit-transform;    	
+    -webkit-transition-property: -webkit-transform;
+    float: left;
 }
 
 .front, .back, .hit {
