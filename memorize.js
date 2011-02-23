@@ -2,9 +2,9 @@ window.addEventListener("load", function(){
     var playground = document.getElementById('playground');
     var map = createMap();
     var engine = createEngine(map);
-    draw(map);
+    draw(map, engine);
     
-    function createCard(i, j, cardNo) {
+    function createCard(i, j, cardNo, onclickCallback) {
         var card = document.createElement("div"),
             back = document.createElement("div"),
             front = document.createElement("div"),
@@ -18,7 +18,7 @@ window.addEventListener("load", function(){
             } else {
                 this.flipToFront();
             }            
-            engine.click(this); 
+            onclickCallback(this); 
         }
         card.hit = function() {
             this.onclick = null; // removing previous connected event listener
@@ -66,7 +66,7 @@ window.addEventListener("load", function(){
     function draw(map, engine) {
         for (var i = 0; i < map.length; i++) {
             for (var j = 0; j < map[i].length; j++) {
-                createCard(i,j, map[i][j], engine);
+                createCard(i,j, map[i][j], engine.click);
             }
         }
     }
@@ -86,7 +86,7 @@ window.addEventListener("load", function(){
                     var lastValue = div.getAttribute("cardNo");
                     var currentValue = this.lastClick.getAttribute("cardNo");
                     
-                    if(lastValue == currentValue) { //hit    
+                    if(lastValue == currentValue) { //hit
                         div.hit();
                         this.lastClick.hit();
                         this.pairsLeft--;

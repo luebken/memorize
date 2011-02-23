@@ -21,40 +21,33 @@ body {
 
 #playground {
     overflow: hidden;
-    max-width: 300px;
+    max-width: 320px;
 }
 
-.card { 
-    top: 100px;
-    width : 50px;
-    height : 50px;
-    margin : 5px;
-    padding : 5px;
-    -webkit-transform-style : preserve-3d;
-    -webkit-transition : 0.5s;
+.card {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    padding: 5px;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transition: 0.5s;
     -webkit-transition-property: -webkit-transform;
     float: left;
+    position:relative;
 }
 
 .front, .back, .hit {
-    width : 100%;
-    height : 100%;
-    position: absolute;
-    left:0px;
-    top:0px;
     -webkit-border-radius: 5px;
+    position: absolute;
 }
 
 .back {
     -webkit-backface-visibility: hidden;
 }
 
-.front {
-    -webkit-transform: rotateY(180deg);    
-}
-
-.flip, .flip-back {
-    -webkit-transform: rotateY(180deg);;      
+.flip {
+    -webkit-transform: rotateY(180deg);
+    -webkit-perspective:200;
 }
 
 img {
