@@ -106,7 +106,7 @@ window.addEventListener("load", function(){
                         setTimeout(function() {
                             last.flipToBack();
                             div.flipToBack();
-                        }, 500);
+                        }, 1500);
                     }
                     this.lastClick = null;
                 } else {
