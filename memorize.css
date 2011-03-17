@@ -24,33 +24,37 @@ body {
     max-width: 320px;
 }
 
+.grid {
+    table-layout: fixed;
+}
+
 .card {
     width: 60px;
     height: 60px;
-    margin: 5px;
     padding: 5px;
     -webkit-transform-style: preserve-3d;
-    -webkit-transition: 0.5s;
-    -webkit-transition-property: -webkit-transform;
-    float: left;
-    position:relative;
+    -webkit-perspective: 200;
 }
 
 .front, .back, .hit {
     -webkit-border-radius: 5px;
-    position: absolute;
+}
+
+.back, .front {
+    -webkit-transition: -webkit-transform 0.5s;
 }
 
 .back {
+    margin-top: -60px;
     -webkit-backface-visibility: hidden;
 }
 
-.flip {
+.flip .back, .flip .front {
     -webkit-transform: rotateY(180deg);
-    -webkit-perspective:200;
 }
 
 .card img {
+    display: block;
     max-height: 60px;
     max-width: 60px;
     -webkit-border-radius: 5px;
@@ -58,8 +62,10 @@ body {
 }
 
 .card span {
+    color: #777;
+    font: bold 60px/1 "Helvetica Neue", Arial, sans-serif;
+    width: 60px;
     position: absolute;
-    top: 0;
-    left: 0;
-    display: none; /* turn on for debugging*/
+    display: none; /* turn on for debugging */
+    text-align: center;
 }
