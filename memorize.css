@@ -20,7 +20,7 @@ body {
 }
 
 #playground {
-    overflow: hidden;
+    /*overflow: hidden;*/
     max-width: 320px;
 }
 
@@ -36,21 +36,24 @@ body {
     -webkit-perspective: 200;
 }
 
-.front, .back, .hit {
+.front, .back {
+    overflow: hidden;
     -webkit-border-radius: 5px;
+    -webkit-transition: -webkit-transform linear 200ms;
 }
 
-.back, .front {
-    -webkit-transition: -webkit-transform 0.5s;
+.front, .flip .back {
+    -webkit-transform: scaleX(0);
+    -webkit-transition-delay: 0;
+}
+
+.flip .front, .back {
+    -webkit-transform: none;
+    -webkit-transition-delay: 200ms;
 }
 
 .back {
     margin-top: -60px;
-    -webkit-backface-visibility: hidden;
-}
-
-.flip .back, .flip .front {
-    -webkit-transform: rotateY(180deg);
 }
 
 .card img {
