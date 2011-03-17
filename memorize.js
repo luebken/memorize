@@ -65,10 +65,8 @@ window.addEventListener("load", function(){
 
     function draw(map, engine, domNode) {
         var doc = domNode.ownerDocument;
-
         var grid = doc.createElement("table");
         grid.className = "grid";
-        domNode.appendChild(grid);
 
         for (var i = 0; i < map.length; i++) {
             var row = grid.insertRow(i);
@@ -77,6 +75,8 @@ window.addEventListener("load", function(){
                 row.appendChild(card);
             }
         }
+
+        domNode.appendChild(grid);
     }
 
     function createEngine(map) {
