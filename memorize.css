@@ -20,41 +20,35 @@ body {
 }
 
 #playground {
-    /*overflow: hidden;*/
     max-width: 320px;
 }
 
 .grid {
-    table-layout: fixed;
+    /*table-layout: fixed;*/
+    -webkit-transform: translate3d(0,0,0);
+    border-collapse: collapse;
 }
 
-.card {
+.grid td {
+    vertical-align: top;
     width: 60px;
     height: 60px;
     padding: 5px;
-    -webkit-transform-style: preserve-3d;
-    -webkit-perspective: 200;
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+}
+
+.hwaccell .front, .hwaccell .back {
 }
 
 .front, .back {
     overflow: hidden;
     -webkit-border-radius: 5px;
-    -webkit-transition: -webkit-transform linear 200ms;
+    position: absolute;
     -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 60px rgba(0, 0, 0, 0.1) inset;
-}
-
-.front, .flip .back {
-    -webkit-transform: scaleX(0);
-    -webkit-transition-delay: 0;
-}
-
-.flip .front, .back {
-    -webkit-transform: none;
-    -webkit-transition-delay: 200ms;
-}
-
-.back {
-    margin-top: -60px;
 }
 
 .card img {
@@ -62,6 +56,7 @@ body {
     max-height: 60px;
     max-width: 60px;
     -webkit-border-radius: 5px;
+    overflow: hidden;
 }
 
 .card span {
@@ -71,4 +66,59 @@ body {
     position: absolute;
     display: none; /* turn on for debugging */
     text-align: center;
+}
+
+/* Flip animations */
+
+.flip .back {
+    display: none;
+}
+
+@media all and (-webkit-transform-2d) {
+    .flip .back {
+        display: block;
+    }
+}
+
+
+@media all and (-webkit-transform-2d) and (-webkit-transform-3d: 0) {
+    .front, .back {
+        -webkit-transition: -webkit-transform linear 250ms;
+    }
+
+    .front, .flip .back {
+        -webkit-transform: scaleX(0);
+        -webkit-transition-delay: 0;
+        display: block;
+    }
+
+    .flip .front, .back {
+        -webkit-transform: scaleX(1);
+        -webkit-transition-delay: 250ms;
+    }
+}
+
+@media all and (-webkit-transform-3d) {
+    #playground {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+
+    .hw-accell td {
+        -webkit-perspective: 200;
+        -webkit-transform-style: preserve-3d;
+    }
+
+    .card {
+        -webkit-transition: 0.5s;
+        -webkit-transition-property: -webkit-transform;
+        -webkit-transform: rotateY(0);
+    }
+
+    .card .back {
+        -webkit-backface-visibility: hidden;
+    }
+
+    .flip {
+        -webkit-transform: rotateY(180deg);
+    }
 }
