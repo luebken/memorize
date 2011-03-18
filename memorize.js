@@ -5,7 +5,7 @@ window.addEventListener("load", function(){
     draw(map, engine, playground);
 
     function createCard(i, j, cardNo, onclickCallback, doc) {
-        var card = doc.createElement("td"),
+        var card = doc.createElement("div"),
             back = doc.createElement("div"),
             front = doc.createElement("div"),
             hint = doc.createElement("span"),
@@ -72,11 +72,19 @@ window.addEventListener("load", function(){
             var row = grid.insertRow(i);
             for (var j = 0; j < map[i].length; j++) {
                 var card = createCard(i,j, map[i][j], engine.click, doc);
-                row.appendChild(card);
+                row.insertCell(j).appendChild(card);
             }
         }
 
         domNode.appendChild(grid);
+        /*
+            To prevent iPhone 3g (iOS 3.1.3) from crashing, we need to insert
+            the dom nodes, wait for the repaint, and apply perspective after
+            that.
+        */
+        setTimeout(function(){
+            grid.className += " hw-accell";
+        }, 1);
     }
 
     function createEngine(map) {
