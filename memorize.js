@@ -1,7 +1,6 @@
 var memorize = {
     containerClassName: "memorize",
-    initFunctions: [],
-    initFuncArguments: [],
+    numPendingInitFuncs: 0,
     images: null,
 
     init: function(domNode, cols, rows, finishCallback) {
@@ -31,14 +30,11 @@ var memorize = {
         loadingMsg.appendChild(doc.createTextNode("Loading \u2026"));
         domNode.appendChild(loadingMsg);
 
-        // register image fetching function
-        this.addInitFunc(this.getImages, [rows * cols]);
-
-        // call initialization functions
-        var initFunctions = this.initFunctions;
-        var initFuncArguments = this.initFuncArguments;
-        for (var i = 0, initFunc; (initFunc = initFunctions[i]); i++) {
-            initFunc.apply(null, initFuncArguments[i]);
+        // calculate image names
+        var images = this.images = [];
+        var numImages = rows * cols / 2;
+        for (; numImages; numImages--) {
+            images.unshift("img" + numImages + ".jpg");
         }
     },
 
@@ -46,30 +42,30 @@ var memorize = {
     // ----------------------------------- initialization function registration
 
     addInitFunc: function(initFunc, args) {
-        var initFunctions = this.initFunctions;
-        if (initFunctions.indexOf(initFunc) === -1) {
-            initFunctions.push(initFunc);
-            this.initFuncArguments.push(args);
-        }
+        this.numPendingInitFuncs += 1;
+
+        args = args || [];
+        // last parameter is a "done" callback that is to be fired when the
+        // init code is done
+        args.push(function() {
+            memorize.initFuncDone();
+        });
+
+        setTimeout(function() {
+            initFunc.apply(null, args);
+        }, 0);
     },
 
-    initFuncDone: function(initFunc) {
-        var initFunctions = this.initFunctions;
-        var index = initFunctions.indexOf(initFunc);
-
-        if (index !== -1) {
-            initFunctions.splice(index, 1);
-            this.initFuncArguments.splice(index, 1);
-
-            if (this.isReady()) {
-                this.domNode.className = this.containerClassName;
-                this.buildGame();
-            }
+    initFuncDone: function() {
+        this.numPendingInitFuncs -= 1;
+        if (this.isReady()) {
+            this.domNode.className = this.containerClassName; // remove "loading" class
+            this.buildGame();
         }
     },
 
     isReady: function() {
-        return this.initFunctions.length === 0;
+        return this.numPendingInitFuncs === 0;
     },
 
     // ---------------------------------------------------------- game building
@@ -198,18 +194,7 @@ var memorize = {
         card.appendChild(back);
 
         return card;
-    },
-
-    //
-    getImages: function getImages(numImages) {
-        var images = [];
-        for (; numImages; numImages--) {
-            images.unshift("img" + numImages + ".jpg");
-        }
-
-        memorize.images = images;
-        memorize.initFuncDone(getImages);
-    },
+    }
 };
 
 var timer = {
