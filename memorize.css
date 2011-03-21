@@ -42,9 +42,6 @@ body {
     height: 100%;
 }
 
-.hwaccell .front, .hwaccell .back {
-}
-
 .front, .back {
     overflow: hidden;
     -webkit-border-radius: 5px;
@@ -101,13 +98,9 @@ body {
 }
 
 @media all and (-webkit-transform-3d) {
-    #playground {
-        -webkit-transform: translate3d(0, 0, 0);
-    }
-
-    .hw-accell td {
-        -webkit-perspective: 200;
+    .grid {
         -webkit-transform-style: preserve-3d;
+        -webkit-perspective: 1000;
     }
 
     .card {

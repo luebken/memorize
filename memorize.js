@@ -151,18 +151,6 @@ var memorize = {
                 cell.appendChild(card);
             }
         }
-
-        //domNode.innerHTML = "";
-        //domNode.appendChild(grid);
-
-        /*
-            To prevent iPhone 3g (iOS 3.1.3) from crashing, we need to insert
-            the dom nodes, wait for the repaint, and apply perspective after
-            that.
-        */
-        //setTimeout(function(){
-        //    grid.className += " hw-accell";
-        //}, 1);
     },
 
     createCard: function(i, j, cardNo, onclickCallback, engine) {
