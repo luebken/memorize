@@ -231,3 +231,33 @@ window.addEventListener("load", function() {
     memorize.init(document.getElementById('playground'), 2, 2, finalize);
     timer.start();
 }, false);
+
+
+// Get geolocation if available
+function getImagesFromFlickrForCity(location, doneCallback) {
+    getImagesFromFlickr('text = "' + location + '"', doneCallback);
+}
+
+function getImagesFromFlickrForGeopos(lat, lon, doneCallback) {
+    getImagesFromFlickr("(lat, lon) in (" + lat + ", " + lon + ") and accuracy = 11", doneCallback);
+}
+
+function getImagesFromFlickr(query, doneCallback) {
+    yqlFlickrCallback._doneCallback = doneCallback;
+}
+
+function yqlFlickrCallback() {
+}
+
+memorize.addInitFunc(function(doneCallback) {
+    if (navigator.geolocation && navigator.geolocation.getCurrentPosition) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            var lat = pos.coords.latitude;
+            var lon = pos.coords.longitude;
+
+
+        });
+    } else { // no geolocation
+        getImagesFromFlickrForCity("M\u00fcnchen", doneCallback);
+    }
+});
