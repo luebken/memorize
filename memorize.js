@@ -183,14 +183,14 @@ var memorize = {
         card.setAttribute("cardNo", cardNo);
         card.className = "card";
 
-        back.className = "back";
+        back.className = "face back";
         hint.appendChild(doc.createTextNode(cardNo));
 
         back.appendChild(hint);
         backImg.src = "back.jpg";
         back.appendChild(backImg);
 
-        front.className = "front";
+        front.className = "face front";
         frontImg.src = "img"+ cardNo + ".jpg";
         front.appendChild(frontImg);
 
@@ -230,7 +230,7 @@ var timer = {
         }
         return diff.getMinutes() + ":" + secs;
     },
-    updateDisplay : function () {        
+    updateDisplay : function () {
         document.getElementById('timer').innerHTML = timer.current();
     }
 }

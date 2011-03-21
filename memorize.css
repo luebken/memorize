@@ -81,7 +81,7 @@ body {
 
 
 @media all and (-webkit-transform-2d) and (-webkit-transform-3d: 0) {
-    .front, .back {
+    .face {
         -webkit-transition: -webkit-transform linear 250ms;
     }
 
@@ -103,17 +103,17 @@ body {
         -webkit-perspective: 1000;
     }
 
-    .card {
+    .face {
         -webkit-transition: 0.5s;
         -webkit-transition-property: -webkit-transform;
-        -webkit-transform: rotateY(0);
     }
 
-    .card .back {
-        -webkit-backface-visibility: hidden;
-    }
-
-    .flip {
+    .front, .flip .back {
         -webkit-transform: rotateY(180deg);
+    }
+
+    .back, .flip .front {
+        -webkit-transform: rotateY(0);
+        -webkit-backface-visibility: hidden;
     }
 }
