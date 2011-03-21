@@ -145,7 +145,9 @@ var memorize = {
             var cells = grid.rows[i].cells;
             for (var j = 0; j < map[i].length; j++) {
                 var card = this.createCard(i,j, map[i][j], engine.click, engine);
-                cells[j].replaceChild(card, cells[j].firstChild);
+                var cell = cells[j];
+                cell.innerHTML = "";
+                cell.appendChild(card);
             }
         }
 
