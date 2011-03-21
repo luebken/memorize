@@ -144,7 +144,7 @@ var memorize = {
         for (var i = 0; i < map.length; i++) {
             var cells = grid.rows[i].cells;
             for (var j = 0; j < map[i].length; j++) {
-                var card = this.createCard(i,j, map[i][j], engine.click);
+                var card = this.createCard(i,j, map[i][j], engine.click, engine);
                 cells[j].appendChild(card);
             }
         }
@@ -162,7 +162,7 @@ var memorize = {
         //}, 1);
     },
 
-    createCard: function(i, j, cardNo, onclickCallback) {
+    createCard: function(i, j, cardNo, onclickCallback, engine) {
         var doc = this.domNode.ownerDocument,
             card = doc.createElement("div"),
             back = doc.createElement("div"),
@@ -177,7 +177,7 @@ var memorize = {
             } else {
                 this.flipToFront();
             }
-            onclickCallback(this);
+            onclickCallback.call(engine, this);
         }
         card.hit = function() {
             this.onclick = null; // removing previous connected event listener
