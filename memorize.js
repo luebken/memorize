@@ -30,11 +30,14 @@ var memorize = {
         loadingMsg.appendChild(doc.createTextNode("Loading \u2026"));
         domNode.appendChild(loadingMsg);
 
-        // calculate image names
-        var images = this.images = [];
-        var numImages = rows * cols / 2;
-        for (; numImages; numImages--) {
-            images.unshift("img" + numImages + ".jpg");
+        // calculate image names if not already defined
+        var images = this.images;
+        if (!images) {
+            this.images = images = [];
+            var numImages = rows * cols / 2;
+            for (; numImages; numImages--) {
+                images.unshift("img" + numImages + ".jpg");
+            }
         }
     },
 
