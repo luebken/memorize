@@ -225,10 +225,10 @@ var timer = {
 
 window.addEventListener("load", function() {
     var finalize = function () {
-        alert('Congrats ' + timer.current());
+        alert('Congratulations you finished in ' + timer.current());
         timer.stop();
     }
-    memorize.init(document.getElementById('playground'), 2, 2, finalize);
+    memorize.init(document.getElementById('playground'), 4, 4, finalize);
     timer.start();
 }, false);
 
