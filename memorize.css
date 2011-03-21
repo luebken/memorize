@@ -48,7 +48,7 @@ body {
     overflow: hidden;
     -webkit-border-radius: 5px;
     position: absolute;
-    -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 60px rgba(0, 0, 0, 0.1) inset;
+    -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .card img {
