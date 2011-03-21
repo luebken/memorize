@@ -4,7 +4,7 @@ window.addEventListener("load", function(){
     var engine = createEngine(map);
     draw(map, engine, playground);
 
-    function createCard(i, j, cardNo, onclickCallback, doc) {
+    function createCard(i, j, cardNo, onclickCallback, doc, engine) {
         var card = doc.createElement("div"),
             back = doc.createElement("div"),
             front = doc.createElement("div"),
@@ -18,7 +18,7 @@ window.addEventListener("load", function(){
             } else {
                 this.flipToFront();
             }
-            onclickCallback(this);
+            onclickCallback.call(engine, this);
         }
         card.hit = function() {
             this.onclick = null; // removing previous connected event listener
@@ -71,7 +71,7 @@ window.addEventListener("load", function(){
         for (var i = 0; i < map.length; i++) {
             var row = grid.insertRow(i);
             for (var j = 0; j < map[i].length; j++) {
-                var card = createCard(i,j, map[i][j], engine.click, doc);
+                var card = createCard(i,j, map[i][j], engine.click, doc, engine);
                 row.insertCell(j).appendChild(card);
             }
         }
