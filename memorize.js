@@ -4,10 +4,11 @@ var memorize = {
     initFuncArguments: [],
     images: null,
 
-    init: function(domNode, cols, rows) {
+    init: function(domNode, cols, rows, finishCallback) {
         this.domNode = domNode;
         this.numCols = cols;
         this.numRows = rows;
+        this.finishCallback = finishCallback;
 
         domNode.innerHTML = "";
         domNode.className = this.containerClassName + " loading";
@@ -117,8 +118,8 @@ var memorize = {
                         card.hit();
                         this.lastClicked.hit();
                         this.pairsLeft--;
-                        if(this.pairsLeft == 0) {
-                            alert('Finished! Congrats.');
+                        if(this.pairsLeft == 0 && memorize.finishCallback) {
+                            memorize.finishCallback();
                         }
                     } else {
                         var last = this.lastClicked;
@@ -223,6 +224,34 @@ var memorize = {
     },
 };
 
+var timer = {
+    startTime : null,
+    intervalID : null,
+    start : function () {
+        startTime = new Date().getTime();
+        intervalID = setInterval(this.updateDisplay, 1000);
+    },
+    stop : function () {
+        clearInterval(intervalID);
+    },
+    current: function () {
+        var diff = new Date(new Date().getTime() - startTime);
+        var secs = diff.getSeconds() + "";
+        if(secs.length < 2) {
+            secs = "0" + secs;
+        }
+        return diff.getMinutes() + ":" + secs;
+    },
+    updateDisplay : function () {        
+        document.getElementById('timer').innerHTML = timer.current();
+    }
+}
+
 window.addEventListener("load", function() {
-    memorize.init(document.getElementById('playground'), 4, 4);
+    var finalize = function () {
+        alert('Congrats ' + timer.current());
+        timer.stop();
+    }
+    memorize.init(document.getElementById('playground'), 2, 2, finalize);
+    timer.start();
 }, false);
