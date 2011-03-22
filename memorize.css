@@ -19,13 +19,30 @@ body {
     color:  rgb(80,80,80);
 }
 
-#playground {
+.memorize {
     max-width: 320px;
+    position: relative;
 }
 
 #timer {
     display: inline;
     padding-left: 15px;
+}
+
+.loading-message {
+    display: none;
+    position: absolute;
+    font-size: 1.5em;
+    line-height: 1;
+    margin-top: -0.75em;
+    top: 50%;
+    text-align: center;
+    text-shadow: #eee 0 1px 0;
+    width: 100%;
+}
+
+.memorize.loading .loading-message {
+    display: block;
 }
 
 .grid {
@@ -128,4 +145,28 @@ body {
         -webkit-transform: rotateY(0);
         -webkit-backface-visibility: hidden;
     }
+}
+
+
+/* Loading animation */
+@-webkit-keyframes loading {
+    0% {
+        /*color: #333;*/
+        opacity: 1;
+        -webkit-animation-timing-function: ease-in-out;
+    }
+    50% {
+        /*color: #777;*/
+        opacity: 0.2;
+        -webkit-animation-timing-function: ease-in-out;
+    }
+    100% {
+        /*color: #333;*/
+        opacity: 1;
+        -webkit-animation-timing-function: ease-in-out;
+    }
+}
+
+.loading-message {
+    -webkit-animation: loading 3s infinite;
 }
