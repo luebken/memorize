@@ -28,7 +28,7 @@ var memorize = {
         // add Loading message
         var loadingMsg = doc.createElement("p");
         loadingMsg.className = "loading-message";
-        loadingMsg.appendChild(doc.createTextNode("Loading \u2026"));
+        loadingMsg.appendChild(doc.createTextNode("Loading\u2026"));
         domNode.appendChild(loadingMsg);
 
         // calculate image names if not already defined
@@ -76,7 +76,6 @@ var memorize = {
     initFuncDone: function() {
         this.numPendingInitFuncs -= 1;
         if (this.isReady()) {
-            this.domNode.className = this.containerClassName; // remove "loading" class
             this.buildGame();
         }
     },
@@ -88,6 +87,9 @@ var memorize = {
     // ---------------------------------------------------------- game building
 
     buildGame: function() {
+        // remove "loading" class
+        this.domNode.className = this.containerClassName;
+
         // truncate number of images if too many
         this.images.length = this.numRows * this.numCols / 2;
 
