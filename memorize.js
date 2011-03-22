@@ -2,6 +2,7 @@ var memorize = {
     containerClassName: "memorize",
     numPendingInitFuncs: 0,
     images: null,
+    isInitialized: false,
 
     init: function(domNode, cols, rows, finishCallback) {
         this.domNode = domNode;
@@ -39,6 +40,19 @@ var memorize = {
                 images.unshift("img" + numImages + ".jpg");
             }
         }
+
+
+
+        // simple sync initialization
+        // this.buildGame();
+
+        // async initialization, give time to register init functions
+        this.isInitialized = true;
+        setTimeout(function() {
+            if (memorize.isReady()) {
+                memorize.buildGame();
+            }
+        }, 0);
     },
 
 
@@ -68,7 +82,7 @@ var memorize = {
     },
 
     isReady: function() {
-        return this.numPendingInitFuncs === 0;
+        return this.isInitialized && this.numPendingInitFuncs === 0;
     },
 
     // ---------------------------------------------------------- game building
