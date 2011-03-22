@@ -19,13 +19,30 @@ body {
     color:  rgb(80,80,80);
 }
 
-#playground {
+.memorize {
     max-width: 320px;
+    position: relative;
 }
 
 #timer {
     display: inline;
     padding-left: 15px;
+}
+
+.loading-message {
+    display: none;
+    position: absolute;
+    font-size: 1.5em;
+    line-height: 1;
+    margin-top: -0.75em;
+    top: 50%;
+    text-align: center;
+    text-shadow: #eee 0 1px 0;
+    width: 100%;
+}
+
+.memorize.loading .loading-message {
+    display: block;
 }
 
 .grid {
@@ -47,19 +64,37 @@ body {
     height: 100%;
 }
 
-.front, .back {
-    overflow: hidden;
-    -webkit-border-radius: 5px;
+.face {
+    background: white center no-repeat;
+    background-size: 100%;
+        -ms-background-size: 100%;
+        -o-background-size: 100%;
+        -moz-background-size: 100%;
+        -webkit-background-size: 100%;
+
+    background-size: cover;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+    height: 60px;
     position: absolute;
+    width: 60px;
+    line-height: 59px;
+    text-align: center;
+    -webkit-border-radius: 5px;
     -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
+.back {
+    background-image: url(back.jpg);
+}
+
 .card img {
-    display: block;
     max-height: 60px;
     max-width: 60px;
-    -webkit-border-radius: 5px;
-    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .card span {
@@ -109,16 +144,43 @@ body {
     }
 
     .face {
-        -webkit-transition: 0.5s;
-        -webkit-transition-property: -webkit-transform;
+        -webkit-transition: 0.5s -webkit-transform;
     }
 
-    .front, .flip .back {
-        -webkit-transform: rotateY(180deg);
+    .front {
+        -webkit-transform: rotateY(180deg) translateZ(1px);
+    }
+
+    .flip .back {
+        -webkit-transform: rotateY(-180deg);
     }
 
     .back, .flip .front {
         -webkit-transform: rotateY(0);
         -webkit-backface-visibility: hidden;
     }
+}
+
+
+/* Loading animation */
+@-webkit-keyframes loading {
+    0% {
+        /*color: #333;*/
+        opacity: 1;
+        -webkit-animation-timing-function: ease-in-out;
+    }
+    50% {
+        /*color: #777;*/
+        opacity: 0.2;
+        -webkit-animation-timing-function: ease-in-out;
+    }
+    100% {
+        /*color: #333;*/
+        opacity: 1;
+        -webkit-animation-timing-function: ease-in-out;
+    }
+}
+
+.loading-message {
+    -webkit-animation: loading 3s infinite;
 }
