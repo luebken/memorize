@@ -176,9 +176,7 @@ var memorize = {
             card = doc.createElement("div"),
             back = doc.createElement("div"),
             front = doc.createElement("div"),
-            hint = doc.createElement("span"),
-            backImg = doc.createElement("img"),
-            frontImg = doc.createElement("img");
+            hint = doc.createElement("span");
 
         card.onclick = function() {
             if(this.className == "card flip") {
@@ -205,12 +203,9 @@ var memorize = {
         hint.appendChild(doc.createTextNode(cardNo));
 
         back.appendChild(hint);
-        backImg.src = "back.jpg";
-        back.appendChild(backImg);
 
         front.className = "face front";
-        frontImg.src = this.images[cardNo - 1];
-        front.appendChild(frontImg);
+        front.style.backgroundImage = "url("+ this.images[cardNo - 1] + ")";
 
         card.appendChild(front);
         card.appendChild(back);

@@ -65,18 +65,29 @@ body {
 }
 
 .face {
-    background: white;
+    background: white center no-repeat;
+    background-size: 100%;
+        -ms-background-size: 100%;
+        -o-background-size: 100%;
+        -moz-background-size: 100%;
+        -webkit-background-size: 100%;
+
+    background-size: cover;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
     height: 60px;
     position: absolute;
     width: 60px;
     line-height: 59px;
     text-align: center;
+    -webkit-border-radius: 5px;
     -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-.face, .back img {
-    -webkit-border-radius: 5px;
-    overflow: hidden;
+.back {
+    background-image: url(back.jpg);
 }
 
 .card img {
