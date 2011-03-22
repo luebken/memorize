@@ -133,12 +133,15 @@ body {
     }
 
     .face {
-        -webkit-transition: 0.5s;
-        -webkit-transition-property: -webkit-transform;
+        -webkit-transition: 0.5s -webkit-transform;
     }
 
-    .front, .flip .back {
-        -webkit-transform: rotateY(180deg);
+    .front {
+        -webkit-transform: rotateY(180deg) translateZ(1px);
+    }
+
+    .flip .back {
+        -webkit-transform: rotateY(-180deg);
     }
 
     .back, .flip .front {
