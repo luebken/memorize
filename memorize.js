@@ -282,11 +282,20 @@ function yqlFlickrCallback(json) {
 }
 
 memorize.addInitFunc(function(doneCallback) {
-    if (navigator.geolocation && navigator.geolocation.getCurrentPosition) {
-        navigator.geolocation.getCurrentPosition(function(pos) {
-            var coords = pos.coords;
-            getImagesFromFlickrForGeopos(coords.latitude, coords.longitude, doneCallback);
-        });
+    function noGeo() {
+        if (console) { console.log("has geo"); }
         getImagesFromFlickrForCity("M\u00fcnchen", doneCallback);
+    }
+
+    function hasGeo(pos) {
+        if (console) { console.log("no geo"); }
+        var coords = pos.coords;
+        getImagesFromFlickrForGeopos(coords.latitude, coords.longitude, doneCallback);
+    }
+
+    if (navigator.geolocation && navigator.geolocation.getCurrentPosition) {
+        navigator.geolocation.getCurrentPosition(hasGeo, noGeo, {timeout: 10000});
+    } else {
+        noGeo();
     }
 });
