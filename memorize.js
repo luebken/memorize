@@ -74,6 +74,9 @@ var memorize = {
     // ---------------------------------------------------------- game building
 
     buildGame: function() {
+        // truncate number of images if too many
+        this.images.length = this.numRows * this.numCols / 2;
+
         var map = this.createMap(this.numCols, this.numRows);
         var engine = this.createEngine(map);
         this.draw(engine, this._domNode);
@@ -190,7 +193,7 @@ var memorize = {
         back.appendChild(backImg);
 
         front.className = "face front";
-        frontImg.src = "img"+ cardNo + ".jpg";
+        frontImg.src = this.images[cardNo - 1];
         front.appendChild(frontImg);
 
         card.appendChild(front);
@@ -235,29 +238,44 @@ window.addEventListener("load", function() {
 
 // Get geolocation if available
 function getImagesFromFlickrForCity(location, doneCallback) {
-    getImagesFromFlickr('text = "' + location + '"', doneCallback);
+    getImagesFromFlickr('text = "' + location + '" and accuracy = 10', doneCallback);
 }
 
 function getImagesFromFlickrForGeopos(lat, lon, doneCallback) {
-    getImagesFromFlickr("(lat, lon) in (" + lat + ", " + lon + ") and accuracy = 11", doneCallback);
+    lat = lat.toFixed(4);
+    lon = lon.toFixed(4);
+    var query = "(lat, lon) in (" + lat + ", " + lon + ") and accuracy = 11";
+    getImagesFromFlickr(query, doneCallback);
 }
 
 function getImagesFromFlickr(query, doneCallback) {
+    var yqlUrl = "http://query.yahooapis.com/v1/public/yql?format=json&callback=yqlFlickrCallback&q=";
+    query = "select * from flickr.photos.search where " + query;
+    var script = document.createElement("script");
+    script.src = yqlUrl + encodeURIComponent(query);
+    (document.body || document.documentElement).appendChild(script);
+
     yqlFlickrCallback._doneCallback = doneCallback;
 }
 
-function yqlFlickrCallback() {
+function yqlFlickrCallback(json) {
+    var flickrImages = json.query.results.photo; // not failsafe!
+    var images = memorize.images = [];
+    for (var i = 0, image; (image = flickrImages[i]); i++) {
+        images[i] = "http://farm" + image.farm +
+            ".static.flickr.com/" + image.server + "/" +
+            image.id + "_" + image.secret + "_t.jpg";
+    }
+
+    yqlFlickrCallback._doneCallback();
 }
 
 memorize.addInitFunc(function(doneCallback) {
     if (navigator.geolocation && navigator.geolocation.getCurrentPosition) {
         navigator.geolocation.getCurrentPosition(function(pos) {
-            var lat = pos.coords.latitude;
-            var lon = pos.coords.longitude;
-
-
+            var coords = pos.coords;
+            getImagesFromFlickrForGeopos(coords.latitude, coords.longitude, doneCallback);
         });
-    } else { // no geolocation
         getImagesFromFlickrForCity("M\u00fcnchen", doneCallback);
     }
 });
