@@ -266,7 +266,7 @@ function getImagesFromFlickrForGeopos(lat, lon, doneCallback) {
 
 function getImagesFromFlickr(query, doneCallback) {
     var yqlUrl = "http://query.yahooapis.com/v1/public/yql?format=json&callback=yqlFlickrCallback&q=";
-    query = "select * from flickr.photos.search where " + query;
+    query = "select * from flickr.photos.search where " + query + ' and sort = "interestingness-desc"';
     var script = document.createElement("script");
     script.src = yqlUrl + encodeURIComponent(query);
     (document.body || document.documentElement).appendChild(script);
