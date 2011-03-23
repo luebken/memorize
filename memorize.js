@@ -1,8 +1,6 @@
 var memorize = {
     containerClassName: "memorize",
     numPendingInitFuncs: 0,
-    images: null,
-    isInitialized: false,
 
     init: function(domNode, cols, rows, finishCallback) {
         this.domNode = domNode;
