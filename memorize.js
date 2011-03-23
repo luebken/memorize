@@ -96,6 +96,7 @@ var memorize = {
         var map = this.createMap(this.numCols, this.numRows);
         var engine = this.createEngine(map);
         this.draw(engine, this._domNode);
+        timer.start();
     },
 
     createMap: function(cols, rows) {
@@ -243,7 +244,6 @@ window.addEventListener("load", function() {
         timer.stop();
     }
     memorize.init(document.getElementById('playground'), 4, 4, finalize);
-    timer.start();
 }, false);
 
 
