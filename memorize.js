@@ -1,7 +1,6 @@
 var memorize = {
     containerClassName: "memorize",
     numPendingInitFuncs: 0,
-
     init: function(domNode, cols, rows, finishCallback) {
         this.domNode = domNode;
         this.numCols = cols;
@@ -214,17 +213,15 @@ var memorize = {
 };
 
 var timer = {
-    startTime : null,
-    intervalID : null,
     start : function () {
-        startTime = new Date().getTime();
-        intervalID = setInterval(this.updateDisplay, 1000);
+        this.startTime = new Date().getTime();
+        this.intervalID = setInterval(this.updateDisplay, 1000);
     },
     stop : function () {
-        clearInterval(intervalID);
+        clearInterval(this.intervalID);
     },
     current: function () {
-        var diff = new Date(new Date().getTime() - startTime);
+        var diff = new Date(new Date().getTime() - this.startTime);
         var secs = diff.getSeconds() + "";
         if(secs.length < 2) {
             secs = "0" + secs;
