@@ -110,22 +110,11 @@ body {
 /* Flip animations */
 
 .flip .back {
-    display: none;
-}
-
-@media all and (-webkit-transform-2d) {
-    .flip .back {
-        display: block;
-    }
-}
-
-.front, .flip .back {
     -webkit-transform: scaleX(0);
-    -webkit-transition-delay: 0;
     display: block;
 }
 
-.flip .front, .back {
+.flip .front {
     -webkit-transform: scaleX(1);
 }
 
