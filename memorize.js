@@ -40,7 +40,6 @@ var memorize = {
         var map = this.createMap(this.numCols, this.numRows);
         var engine = this.createEngine(map);
         this.draw(engine, this._domNode);
-        timer.start();
     },
 
     createMap: function(cols, rows) {
