@@ -119,68 +119,13 @@ body {
     }
 }
 
-
-@media all and (-webkit-transform-2d) and (-webkit-transform-3d: 0) {
-    .face {
-        -webkit-transition: -webkit-transform linear 250ms;
-    }
-
-    .front, .flip .back {
-        -webkit-transform: scaleX(0);
-        -webkit-transition-delay: 0;
-        display: block;
-    }
-
-    .flip .front, .back {
-        -webkit-transform: scaleX(1);
-        -webkit-transition-delay: 250ms;
-    }
+.front, .flip .back {
+    -webkit-transform: scaleX(0);
+    -webkit-transition-delay: 0;
+    display: block;
 }
 
-@media all and (-webkit-transform-3d) {
-    .grid {
-        -webkit-transform-style: preserve-3d;
-        -webkit-perspective: 1000;
-    }
-
-    .face {
-        -webkit-transition: 0.5s -webkit-transform;
-    }
-
-    .front {
-        -webkit-transform: rotateY(180deg) translateZ(1px);
-    }
-
-    .flip .back {
-        -webkit-transform: rotateY(-180deg);
-    }
-
-    .back, .flip .front {
-        -webkit-transform: rotateY(0);
-        -webkit-backface-visibility: hidden;
-    }
+.flip .front, .back {
+    -webkit-transform: scaleX(1);
 }
 
-
-/* Loading animation */
-@-webkit-keyframes loading {
-    0% {
-        /*color: #333;*/
-        opacity: 1;
-        -webkit-animation-timing-function: ease-in-out;
-    }
-    50% {
-        /*color: #777;*/
-        opacity: 0.2;
-        -webkit-animation-timing-function: ease-in-out;
-    }
-    100% {
-        /*color: #333;*/
-        opacity: 1;
-        -webkit-animation-timing-function: ease-in-out;
-    }
-}
-
-.loading-message {
-    -webkit-animation: loading 3s infinite;
-}
