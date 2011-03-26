@@ -1,6 +1,3 @@
-var numRows = 4;
-var numCols = 4;
-
 var memorize = {
     containerClassName: "memorize",
     numPendingInitFuncs: 0,
@@ -73,7 +70,6 @@ var memorize = {
     initFuncDone: function() {
         this.numPendingInitFuncs -= 1;
         if (this.isReady()) {
-            this.saveImages();
             this.buildGame();
         }
     },
@@ -210,13 +206,6 @@ var memorize = {
         card.appendChild(back);
 
         return card;
-    },
-    
-    saveImages: function(){
-        localStorage.clear();
-        for(var i=0,l=this.images.length;i<l;i++){
-            localStorage.setItem("image"+i, this.images[i]);
-        }
     }
 };
 
@@ -265,6 +254,9 @@ var helper = {
     }
 }
 
+var numRows = 4;
+var numCols = 4;
+
 window.addEventListener("load", function() {
     var finalize = function () {
         alert('Congratulations you finished in ' + timer.current());
@@ -273,6 +265,33 @@ window.addEventListener("load", function() {
     memorize.init(document.getElementById('playground'), numCols, numRows, finalize);
 }, false);
 
+// Functions for localStorage
+var storage = {
+    supportsLocalStorage: (function(){
+        try {
+            return 'localStorage' in window && window['localStorage'] !== null;
+          } catch(e){
+            return false;
+          }
+    })(),
+    saveImages: function(){
+        if(!this.supportsLocalStorage) return;
+        localStorage.clear();
+        for(var i=0,l=memorize.images.length;i<l;i++){
+            localStorage.setItem("image"+i, memorize.images[i]);
+        }
+    },
+    loadImages: function() {
+        if(!this.supportsLocalStorage) return;
+        for(var i=0,l=localStorage.length;i<l;i++){
+            var key = localStorage.key(i),
+                value = localStorage.getItem(key);
+            if(key.indexOf("image") > -1){
+                memorize.images[key.substring(5)] = value;
+            }
+        }
+    }
+}
 
 // Get geolocation if available
 function getImagesFromFlickrForCity(location, doneCallback) {
@@ -290,21 +309,10 @@ function getImagesFromFlickr(query, doneCallback) {
     var yqlUrl = "http://query.yahooapis.com/v1/public/yql?format=json&q=";
     query = "select * from flickr.photos.search(" + parseInt(numCols*numRows/2) + ") where " + query + ' and sort = "interestingness-desc"';
     helper.jsonp(yqlUrl + encodeURIComponent(query), yqlFlickrCallback, function(){
-        loadImages();
-        memorize.buildGame();
+        // when an error occurs, we gonna try to get the images from our storage
+        storage.loadImages();
     });
     yqlFlickrCallback._doneCallback = doneCallback;
-}
-
-function loadImages() {
-    // when an error occurs, we gonna try localstorage
-    for(var i=0,l=localStorage.length;i<l;i++){
-        var key = localStorage.key(i),
-            value = localStorage.getItem(key);
-        if(key.indexOf("image") > -1){
-            memorize.images[key.substring(5)] = value;
-        }
-    }
 }
 
 function yqlFlickrCallback(json) {
@@ -320,6 +328,7 @@ function yqlFlickrCallback(json) {
             function(j){ return function(imgData){
                 images[j] = imgData.data;
                 if(memorize.images.length == i){
+                    storage.saveImages();
                     yqlFlickrCallback._doneCallback();
                 }
             }}(i)
