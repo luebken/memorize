@@ -37,9 +37,7 @@ var memorize = {
                 images.unshift("img" + numImages + ".jpg");
             }
         }
-
-
-
+        
         // simple sync initialization
         // this.buildGame();
 
@@ -73,6 +71,7 @@ var memorize = {
     initFuncDone: function() {
         this.numPendingInitFuncs -= 1;
         if (this.isReady()) {
+            this.saveImages();
             this.buildGame();
         }
     },
@@ -162,7 +161,6 @@ var memorize = {
             var cells = grid.rows[i].cells;
             for (var j = 0; j < map[i].length; j++) {
                 var card = this.createCard(i,j, map[i][j], engine.click, engine);
-                console.log(map[i][j]);
                 var cell = cells[j];
                 cell.innerHTML = "";
                 cell.appendChild(card);
@@ -210,6 +208,13 @@ var memorize = {
         card.appendChild(back);
 
         return card;
+    },
+    
+    saveImages: function(){
+        localStorage.clear();
+        for(var i=0,l=this.images.length;i<l;i++){
+            localStorage.setItem("image"+i, this.images[i]);
+        }
     }
 };
 
@@ -258,10 +263,20 @@ function getImagesFromFlickrForGeopos(lat, lon, doneCallback) {
 function getImagesFromFlickr(query, doneCallback) {
     var yqlUrl = "http://query.yahooapis.com/v1/public/yql?format=json&callback=yqlFlickrCallback&q=";
     query = "select * from flickr.photos.search(" + parseInt(memorize.numCols*memorize.numRows/2) + ") where " + query + ' and sort = "interestingness-desc"';
-    console.log(query);
     var script = document.createElement("script");
     script.src = yqlUrl + encodeURIComponent(query);
     (document.body || document.documentElement).appendChild(script);
+    script.addEventListener("error", function(){
+        // when an error occurs, we gonna try localstorage
+        for(var i=0,l=localStorage.length;i<l;i++){
+            var key = localStorage.key(i),
+                value = localStorage.getItem(key);
+            if(key.indexOf("image") > -1){
+                memorize.images[key.substring(5)] = value;
+            }
+        }
+        memorize.buildGame();
+    }, true);
 
     yqlFlickrCallback._doneCallback = doneCallback;
 }
@@ -270,12 +285,20 @@ function yqlFlickrCallback(json) {
     var flickrImages = json.query.results.photo; // not failsafe!
     var images = memorize.images = [];
     for (var i = 0, image; (image = flickrImages[i]); i++) {
-        images[i] = "http://farm" + image.farm +
+        flickr_image = "http://farm" + image.farm +
             ".static.flickr.com/" + image.server + "/" +
             image.id + "_" + image.secret + "_t.jpg";
+        // append images as data-url (being able to save remote images to localstorage)
+        var s = document.createElement("script");
+        window["imgToJson"+i] = function(j){ return function(imgData){
+            images[j] = imgData.data;
+            if(memorize.images.length == i){
+                yqlFlickrCallback._doneCallback();
+            }
+        }}(i);
+        s.src='http://img-to-json.appspot.com/?url='+flickr_image+'&callback=imgToJson'+i;
+        document.body.appendChild(s);
     }
-
-    yqlFlickrCallback._doneCallback();
 }
 
 memorize.addInitFunc(function(doneCallback) {
