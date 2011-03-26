@@ -1,5 +1,5 @@
 var numRows = 4;
-var numCols = 10;
+var numCols = 4;
 
 var memorize = {
     containerClassName: "memorize",
@@ -242,6 +242,30 @@ var timer = {
     }
 }
 
+var helper = {
+    _jsonpId:0,
+    _cb:{},
+    jsonp: function(url, success, error, callbackParamName){
+        /* Simple helper for doing jsonp calls */
+        if(! (url && success)){
+            return;
+        }
+        var script = document.createElement("script"),
+            callbackParamName = callbackParamName ? callbackParamName : "callback",
+            callbackFuncName = '_jsonp'+this._jsonpId++,
+            urlAddon = url.indexOf("?")>-1 ? '&' : '?',
+            urlAddon = urlAddon + callbackParamName + "=" + "helper._cb." + callbackFuncName;
+        this._cb[callbackFuncName] = function(data){
+            success(data);
+        }
+        script.src = url + urlAddon;
+        if(error && typeof(error) == "function"){
+            script.addEventListener("error", error, true);
+        }
+        (document.body || document.documentElement).appendChild(script);
+    }
+}
+
 window.addEventListener("load", function() {
     var finalize = function () {
         alert('Congratulations you finished in ' + timer.current());
@@ -264,24 +288,24 @@ function getImagesFromFlickrForGeopos(lat, lon, doneCallback) {
 }
 
 function getImagesFromFlickr(query, doneCallback) {
-    var yqlUrl = "http://query.yahooapis.com/v1/public/yql?format=json&callback=yqlFlickrCallback&q=";
+    var yqlUrl = "http://query.yahooapis.com/v1/public/yql?format=json&q=";
     query = "select * from flickr.photos.search(" + parseInt(numCols*numRows/2) + ") where " + query + ' and sort = "interestingness-desc"';
-    var script = document.createElement("script");
-    script.src = yqlUrl + encodeURIComponent(query);
-    (document.body || document.documentElement).appendChild(script);
-    script.addEventListener("error", function(){
-        // when an error occurs, we gonna try localstorage
-        for(var i=0,l=localStorage.length;i<l;i++){
-            var key = localStorage.key(i),
-                value = localStorage.getItem(key);
-            if(key.indexOf("image") > -1){
-                memorize.images[key.substring(5)] = value;
-            }
-        }
+    helper.jsonp(yqlUrl + encodeURIComponent(query), yqlFlickrCallback, function(){
+        loadImages();
         memorize.buildGame();
-    }, true);
-
+    });
     yqlFlickrCallback._doneCallback = doneCallback;
+}
+
+function loadImages() {
+    // when an error occurs, we gonna try localstorage
+    for(var i=0,l=localStorage.length;i<l;i++){
+        var key = localStorage.key(i),
+            value = localStorage.getItem(key);
+        if(key.indexOf("image") > -1){
+            memorize.images[key.substring(5)] = value;
+        }
+    }
 }
 
 function yqlFlickrCallback(json) {
@@ -292,15 +316,15 @@ function yqlFlickrCallback(json) {
             ".static.flickr.com/" + image.server + "/" +
             image.id + "_" + image.secret + "_t.jpg";
         // append images as data-url (being able to save remote images to localstorage)
-        var s = document.createElement("script");
-        window["imgToJson"+i] = function(j){ return function(imgData){
-            images[j] = imgData.data;
-            if(memorize.images.length == i){
-                yqlFlickrCallback._doneCallback();
-            }
-        }}(i);
-        s.src='http://img-to-json.appspot.com/?url='+flickr_image+'&callback=imgToJson'+i;
-        document.body.appendChild(s);
+        helper.jsonp(
+            'http://img-to-json.appspot.com/?url='+flickr_image,
+            function(j){ return function(imgData){
+                images[j] = imgData.data;
+                if(memorize.images.length == i){
+                    yqlFlickrCallback._doneCallback();
+                }
+            }}(i)
+        )
         //images[i] = flickr_image;
     }
     //yqlFlickrCallback._doneCallback();
