@@ -162,6 +162,7 @@ var memorize = {
             var cells = grid.rows[i].cells;
             for (var j = 0; j < map[i].length; j++) {
                 var card = this.createCard(i,j, map[i][j], engine.click, engine);
+                console.log(map[i][j]);
                 var cell = cells[j];
                 cell.innerHTML = "";
                 cell.appendChild(card);
@@ -250,13 +251,14 @@ function getImagesFromFlickrForCity(location, doneCallback) {
 function getImagesFromFlickrForGeopos(lat, lon, doneCallback) {
     lat = lat.toFixed(4);
     lon = lon.toFixed(4);
-    var query = "(lat, lon) in (" + lat + ", " + lon + ") and accuracy = 11";
+    var query = "place_id in (select place.place_id from flickr.places where lat=" + lat + " and lon=" + lon + ") and accuracy = 6";
     getImagesFromFlickr(query, doneCallback);
 }
 
 function getImagesFromFlickr(query, doneCallback) {
     var yqlUrl = "http://query.yahooapis.com/v1/public/yql?format=json&callback=yqlFlickrCallback&q=";
-    query = "select * from flickr.photos.search where " + query + ' and sort = "interestingness-desc"';
+    query = "select * from flickr.photos.search(" + parseInt(memorize.numCols*memorize.numRows/2) + ") where " + query + ' and sort = "interestingness-desc"';
+    console.log(query);
     var script = document.createElement("script");
     script.src = yqlUrl + encodeURIComponent(query);
     (document.body || document.documentElement).appendChild(script);
@@ -278,12 +280,12 @@ function yqlFlickrCallback(json) {
 
 memorize.addInitFunc(function(doneCallback) {
     function noGeo() {
-        if (console) { console.log("has geo"); }
+        if (console) { console.log("no geo"); }
         getImagesFromFlickrForCity("M\u00fcnchen", doneCallback);
     }
 
     function hasGeo(pos) {
-        if (console) { console.log("no geo"); }
+        if (console) { console.log("has geo"); }
         var coords = pos.coords;
         getImagesFromFlickrForGeopos(coords.latitude, coords.longitude, doneCallback);
     }
