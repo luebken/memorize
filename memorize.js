@@ -46,11 +46,10 @@ var memorize = {
 
         // async initialization, give time to register init functions
         this.isInitialized = true;
-        setTimeout(function() {
-            if (memorize.isReady()) {
-                memorize.buildGame();
-            }
-        }, 0);
+        this.addInitFunc(function(doneCallback){
+            // nothing to do, singalize "ready to go"
+            doneCallback();
+        });
     },
 
 
