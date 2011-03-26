@@ -1,3 +1,6 @@
+var numRows = 4;
+var numCols = 10;
+
 var memorize = {
     containerClassName: "memorize",
     numPendingInitFuncs: 0,
@@ -174,8 +177,8 @@ var memorize = {
             back = doc.createElement("div"),
             front = doc.createElement("div"),
             hint = doc.createElement("span");
-
-        card.onclick = function() {
+        
+        card["ontouchstart" in document ? "ontouchstart" : "onclick"] = function() {
             if(this.className == "card flip") {
                 this.flipToBack();
             } else {
@@ -244,7 +247,7 @@ window.addEventListener("load", function() {
         alert('Congratulations you finished in ' + timer.current());
         timer.stop();
     }
-    memorize.init(document.getElementById('playground'), 4, 4, finalize);
+    memorize.init(document.getElementById('playground'), numCols, numRows, finalize);
 }, false);
 
 
@@ -262,7 +265,7 @@ function getImagesFromFlickrForGeopos(lat, lon, doneCallback) {
 
 function getImagesFromFlickr(query, doneCallback) {
     var yqlUrl = "http://query.yahooapis.com/v1/public/yql?format=json&callback=yqlFlickrCallback&q=";
-    query = "select * from flickr.photos.search(" + parseInt(memorize.numCols*memorize.numRows/2) + ") where " + query + ' and sort = "interestingness-desc"';
+    query = "select * from flickr.photos.search(" + parseInt(numCols*numRows/2) + ") where " + query + ' and sort = "interestingness-desc"';
     var script = document.createElement("script");
     script.src = yqlUrl + encodeURIComponent(query);
     (document.body || document.documentElement).appendChild(script);
@@ -298,7 +301,9 @@ function yqlFlickrCallback(json) {
         }}(i);
         s.src='http://img-to-json.appspot.com/?url='+flickr_image+'&callback=imgToJson'+i;
         document.body.appendChild(s);
+        //images[i] = flickr_image;
     }
+    //yqlFlickrCallback._doneCallback();
 }
 
 memorize.addInitFunc(function(doneCallback) {
