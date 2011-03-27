@@ -332,7 +332,7 @@ function yqlFlickrCallback(json) {
                     yqlFlickrCallback._doneCallback();
                 }
             }}(i)
-        )
+        );
         //images[i] = flickr_image;
     }
     //yqlFlickrCallback._doneCallback();
