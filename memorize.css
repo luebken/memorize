@@ -1,5 +1,4 @@
 body {
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
     background: rgb(180,180,180);
     font: bold 1em Helvetica, Arial, "Luxi Sans", sans-serif;
 }
@@ -27,7 +26,6 @@ body {
 .grid {
     table-layout: fixed;
     border-spacing: 0;
-    -webkit-transform: translate3d(0,0,0);
     border-collapse: collapse;
 }
 
@@ -61,8 +59,6 @@ body {
     width: 60px;
     line-height: 59px;
     text-align: center;
-    -webkit-border-radius: 5px;
-    -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .back {
