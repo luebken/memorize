@@ -24,27 +24,6 @@ body {
     position: relative;
 }
 
-#timer {
-    display: inline;
-    padding-left: 15px;
-}
-
-.loading-message {
-    display: none;
-    position: absolute;
-    font-size: 1.5em;
-    line-height: 1;
-    margin-top: -0.75em;
-    top: 50%;
-    text-align: center;
-    text-shadow: #eee 0 1px 0;
-    width: 100%;
-}
-
-.memorize.loading .loading-message {
-    display: block;
-}
-
 .grid {
     table-layout: fixed;
     border-spacing: 0;
