@@ -107,14 +107,7 @@ body {
     text-align: center;
 }
 
-/* Flip animations */
-
 .flip .back {
-    -webkit-transform: scaleX(0);
-    display: block;
-}
-
-.flip .front {
-    -webkit-transform: scaleX(1);
+    display: none;
 }
 
