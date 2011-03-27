@@ -188,7 +188,7 @@ var memorize = {
             this.className = "card flip";
         }
         card.flipToBack = function() {
-            this.className = "card flipback";
+            this.className = "card";
         }
 
         card.setAttribute("cardNo", cardNo);
