@@ -230,6 +230,17 @@ var timer = {
     }
 }
 
+var numRows = 4;
+var numCols = 4;
+
+window.addEventListener("load", function() {
+    var finalize = function () {
+        alert('Congratulations you finished in ' + timer.current());
+        timer.stop();
+    }
+    memorize.init(document.getElementById('playground'), numCols, numRows, finalize);
+}, false);
+
 var helper = {
     _jsonpId:0,
     _cb:{},
@@ -253,17 +264,6 @@ var helper = {
         (document.body || document.documentElement).appendChild(script);
     }
 }
-
-var numRows = 4;
-var numCols = 4;
-
-window.addEventListener("load", function() {
-    var finalize = function () {
-        alert('Congratulations you finished in ' + timer.current());
-        timer.stop();
-    }
-    memorize.init(document.getElementById('playground'), numCols, numRows, finalize);
-}, false);
 
 // Functions for localStorage
 var storage = {
