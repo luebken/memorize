@@ -6,7 +6,7 @@ var memorize = {
         this.finishCallback = finishCallback;
 
         domNode.innerHTML = "";
-        
+
         // build grid
         var doc = domNode.ownerDocument;
         var grid = this.gridNode = doc.createElement("table");
@@ -18,6 +18,12 @@ var memorize = {
             }
         }
         domNode.appendChild(grid);
+
+        // add Loading message
+        var loadingMsg = doc.createElement("p");
+        loadingMsg.className = "loading-message";
+        loadingMsg.appendChild(doc.createTextNode("Loading\u2026"));
+        domNode.appendChild(loadingMsg);
 
         // calculate image names if not already defined
         var images = this.images;
