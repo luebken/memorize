@@ -318,6 +318,7 @@ function getImagesFromFlickr(query, doneCallback) {
 function yqlFlickrCallback(json) {
     var flickrImages = json.query.results.photo; // not failsafe!
     var images = memorize.images = [];
+    var counter = [];
     for (var i = 0, image; (image = flickrImages[i]); i++) {
         flickr_image = "http://farm" + image.farm +
             ".static.flickr.com/" + image.server + "/" +
@@ -327,7 +328,8 @@ function yqlFlickrCallback(json) {
             'http://img-to-json.appspot.com/?url='+flickr_image,
             function(j){ return function(imgData){
                 images[j] = imgData.data;
-                if(memorize.images.length == i){
+                counter[counter.length] = j;
+                if(counter.length == i){
                     storage.saveImages();
                     yqlFlickrCallback._doneCallback();
                 }
