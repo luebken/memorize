@@ -313,7 +313,7 @@ function getImagesFromFlickr(query, doneCallback) {
     var yqlUrl = "http://query.yahooapis.com/v1/public/yql?format=json&q=";
     query = "select * from flickr.photos.search(" + parseInt(numCols*numRows/2) + ") where " + query + ' and sort = "interestingness-desc"';
     helper.jsonp(yqlUrl + encodeURIComponent(query), yqlFlickrCallback);
-    setTimeout('yqlFlickrFallback()', 8000);
+    setTimeout('yqlFlickrFallback()', 4000);
     yqlFlickrCallback._doneCallback = doneCallback;
 }
 
