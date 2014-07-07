@@ -1,6 +1,7 @@
 var memorize = {
     containerClassName: "memorize",
     numPendingInitFuncs: 0,
+    loadingImagesSucceeded: false,
     init: function(domNode, cols, rows, finishCallback) {
         this.domNode = domNode;
         this.numCols = cols;
@@ -258,9 +259,6 @@ var helper = {
             success(data);
         }
         script.src = url + urlAddon;
-        if(error && typeof(error) == "function"){
-            script.addEventListener("error", error, true);
-        }
         (document.body || document.documentElement).appendChild(script);
     }
 }
@@ -283,6 +281,10 @@ var storage = {
     },
     loadImages: function() {
         if(!this.supportsLocalStorage) return;
+        
+        console.log('loaded images from storage');
+        memorize.loadingImagesSucceeded = true;
+        
         for(var i=0,l=localStorage.length;i<l;i++){
             var key = localStorage.key(i),
                 value = localStorage.getItem(key);
@@ -290,6 +292,8 @@ var storage = {
                 memorize.images[key.substring(5)] = value;
             }
         }
+        
+        yqlFlickrCallback._doneCallback();
     }
 }
 
@@ -308,16 +312,25 @@ function getImagesFromFlickrForGeopos(lat, lon, doneCallback) {
 function getImagesFromFlickr(query, doneCallback) {
     var yqlUrl = "http://query.yahooapis.com/v1/public/yql?format=json&q=";
     query = "select * from flickr.photos.search(" + parseInt(numCols*numRows/2) + ") where " + query + ' and sort = "interestingness-desc"';
-    helper.jsonp(yqlUrl + encodeURIComponent(query), yqlFlickrCallback, function(){
-        // when an error occurs, we gonna try to get the images from our storage
-        storage.loadImages();
-    });
+    helper.jsonp(yqlUrl + encodeURIComponent(query), yqlFlickrCallback);
+    setTimeout('yqlFlickrFallback()', 4000);
     yqlFlickrCallback._doneCallback = doneCallback;
 }
 
+function yqlFlickrFallback() {
+    if (!memorize.loadingImagesSucceeded) {
+        storage.loadImages();
+    }
+}
+
 function yqlFlickrCallback(json) {
+    if (memorize.loadingImagesSucceeded) return;
+    
+    console.log('loaded images from web');
+    memorize.loadingImagesSucceeded = true;
     var flickrImages = json.query.results.photo; // not failsafe!
     var images = memorize.images = [];
+    var counter = [];
     for (var i = 0, image; (image = flickrImages[i]); i++) {
         flickr_image = "http://farm" + image.farm +
             ".static.flickr.com/" + image.server + "/" +
@@ -327,7 +340,8 @@ function yqlFlickrCallback(json) {
             'http://img-to-json.appspot.com/?url='+flickr_image,
             function(j){ return function(imgData){
                 images[j] = imgData.data;
-                if(memorize.images.length == i){
+                counter[counter.length] = j;
+                if(counter.length == i){
                     storage.saveImages();
                     yqlFlickrCallback._doneCallback();
                 }
