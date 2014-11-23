@@ -1,4 +1,5 @@
 var memorize = {
+    containerClassName: "memorize",
     init: function(domNode, cols, rows, finishCallback) {
         this.domNode = domNode;
         this.numCols = cols;
